@@ -2,7 +2,7 @@ import axios from "axios";
 import { NextResponse } from "next/server";
 
 export async function POST(request, response) {
-    const apikey = '';
+    const apikey = process.env.APIKEY;
     const { query } = await request.json();
     const generalResult = await axios.get('https://financialmodelingprep.com/api/v3/search?limit=5&exchange=NASDAQ', {
         params: { apikey: apikey,
