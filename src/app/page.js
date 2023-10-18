@@ -50,7 +50,7 @@ export default function Home() {
         </div>
         <div className={styles.results}>
           {wikiData?.map((elem) => {
-            return JSON.stringify(elem)
+            return <div key={Math.random()*900}>{JSON.stringify(elem)}</div>
           })}
         </div>
       </div>
@@ -63,7 +63,7 @@ export default function Home() {
         </div>
         <div className={styles.results}>
           {companyData?.map((elem) => {
-            return <div className={styles.companyData}><pre>{JSON.stringify(elem, null, 2)}</pre></div>
+            return <div key={Math.random()*240000} className={styles.companyData}><pre>{JSON.stringify(elem, null, 2)}</pre></div>
           })}
         </div>
       </div>
