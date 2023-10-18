@@ -11,7 +11,7 @@ export default function Home() {
   const [companyData, setCompanyData] = useState([]);
 
   const handleWikiSearch = async () => {
-    const res = await axios.post('http://localhost:3000/api/wiki', {
+    const res = await axios.post('/api/wiki', {
       query: wikiSearch
     })
     if(res.data=="No Hits"){
@@ -28,7 +28,7 @@ export default function Home() {
   }
 
   const handleCompanySearch = async () => {
-    const res = await axios.post('http://localhost:3000/api/company', {
+    const res = await axios.post('/api/company', {
       query: companySearch
     })
     if(res.data=="No Hits"){
