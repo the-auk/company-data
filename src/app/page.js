@@ -14,6 +14,10 @@ export default function Home() {
     const res = await axios.post('http://localhost:3000/api/wiki', {
       query: wikiSearch
     })
+    if(res.data=="No Hits"){
+      setWikiData(["No Hits"])
+      return 
+    }
     let tempLength = res.data.search.length;
     let tempFirst = res.data.search[0].snippet;
     while (tempFirst.includes(`<span class=\"searchmatch\">`) || tempFirst.includes("</span>")) {
@@ -27,6 +31,10 @@ export default function Home() {
     const res = await axios.post('http://localhost:3000/api/company', {
       query: companySearch
     })
+    if(res.data=="No Hits"){
+      setCompanyData(["No Hits"])
+      return 
+    }
     setCompanyData(res.data)
   }
 

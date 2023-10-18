@@ -9,6 +9,9 @@ export async function POST(request, response) {
              query: query }
     });
     let companies = generalResult.data;
+    if(companies.length==0){
+        return NextResponse.json("No Hits")
+    }
     for (let x in companies) {
 
         const result = await axios.get(`https://financialmodelingprep.com/api/v3/profile/${companies[x].symbol}`, {
@@ -16,6 +19,5 @@ export async function POST(request, response) {
         });
         companies[x]["companyData"]=result.data[0]
     }
-    console.log(companies)
     return NextResponse.json(companies)
 }

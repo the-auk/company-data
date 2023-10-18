@@ -8,6 +8,9 @@ export async function POST(request, response) {
         srsearch:query
       }
     })
+  if(result.data.query.searchinfo.totalhits==0){
+    return NextResponse.json("No Hits")
+  }
   return NextResponse.json(result.data.query)
 }
 
