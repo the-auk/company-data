@@ -9,8 +9,8 @@ export default function Home() {
   const [wikiData, setWikiData] = useState([]);
   const [companySearch, setCompanySearch] = useState('');
   const [companyData, setCompanyData] = useState([]);
-  const apiPath = 'https://company-data.vercel.app/'
-
+  const apiPath = 'http://localhost:3000/'
+  //'https://company-data.vercel.app/'
 
   const handleWikiSearch = async () => {
     const res = await axios.post(`${apiPath}/api/wiki`, {
@@ -20,7 +20,8 @@ export default function Home() {
       setWikiData(["No Hits"])
       return 
     }
-    let tempLength = res.data.search.length;
+    console.log(res.data)
+    let tempLength = res.data.searchinfo.totalhits;
     let tempFirst = res.data.search[0].snippet;
     while (tempFirst.includes(`<span class=\"searchmatch\">`) || tempFirst.includes("</span>")) {
       tempFirst = tempFirst.replace(`<span class=\"searchmatch\">`, "")
