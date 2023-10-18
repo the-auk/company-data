@@ -9,8 +9,8 @@ export default function Home() {
   const [wikiData, setWikiData] = useState([]);
   const [companySearch, setCompanySearch] = useState('');
   const [companyData, setCompanyData] = useState([]);
-  const apiPath = 'http://localhost:3000/'
-  //'https://company-data.vercel.app/'
+  const apiPath = 'https://company-data.vercel.app/'
+  //'http://localhost:3000/'
 
   const handleWikiSearch = async () => {
     const res = await axios.post(`${apiPath}/api/wiki`, {
