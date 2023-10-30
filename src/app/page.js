@@ -20,14 +20,7 @@ export default function Home() {
       setWikiData(["No Hits"])
       return 
     }
-    console.log(res.data)
-    let tempLength = res.data.searchinfo.totalhits;
-    let tempFirst = res.data.search[0].snippet;
-    while (tempFirst.includes(`<span class=\"searchmatch\">`) || tempFirst.includes("</span>")) {
-      tempFirst = tempFirst.replace(`<span class=\"searchmatch\">`, "")
-      tempFirst = tempFirst.replace("</span>", "")
-    }
-    setWikiData([{ 'numberOfHits': tempLength, 'firstHit': tempFirst }])
+    setWikiData([res.data])
   }
 
   const handleCompanySearch = async () => {

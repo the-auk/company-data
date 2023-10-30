@@ -8,9 +8,16 @@ export async function POST(request, response) {
         srsearch:query
       }
     })
-  if(result.data.query.searchinfo.totalhits==0){
+  let tempLength = result.data.query.searchinfo.totalhits;
+  if(tempLength==0){
     return NextResponse.json("No Hits")
   }
-  return NextResponse.json(result.data.query)
+  let tempFirst = result.data.query.search[0].snippet;
+    while (tempFirst.includes(`<span class=\"searchmatch\">`) || tempFirst.includes("</span>")) {
+      tempFirst = tempFirst.replace(`<span class=\"searchmatch\">`, "")
+      tempFirst = tempFirst.replace("</span>", "")
+    }
+  let returnResult = {'numberOfHits':result.data.query.searchinfo.totalhits, 'firstHit':tempFirst}
+  console.log(returnResult)
+  return NextResponse.json(returnResult)
 }
-
