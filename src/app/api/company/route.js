@@ -20,7 +20,6 @@ export async function POST(request, response) {
         });
         companies[x]["companyData"]=result.data[0]
         const result2 = await axios.get(`https://www.alphavantage.co/query?function=EARNINGS&symbol=${companies[x].symbol}&apikey=7WUZBM2NPI65JS4L`)
-        console.log(result2.data)
         companies[x]["earningsData"]=result2.data
         const result3 = await axios.get(`https://financialmodelingprep.com/api/v3/income-statement/${companies[x].symbol}?period=annual`, {
             params :{ apikey: apikey}
