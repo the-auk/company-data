@@ -9,7 +9,7 @@ export default function Home() {
   const [wikiData, setWikiData] = useState([]);
   const [companySearch, setCompanySearch] = useState('');
   const [companyData, setCompanyData] = useState([]);
-  const apiPath = 'https://company-data.vercel.app/'
+  const apiPath = 'https://company-data.vercel.app/';
   //'http://localhost:3000/'
 
   const handleWikiSearch = async () => {
