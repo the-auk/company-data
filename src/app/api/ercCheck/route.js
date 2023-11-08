@@ -10,30 +10,27 @@ const industries = {
     'Airlines':1,
     'Auto & Truck Dealerships':1
 }
-export async function GET(request, response){
-    const symbols = await axios.get('https://financialmodelingprep.com/api/v3/symbol/NASDAQ', {
-        params: { apikey: apikey}
-    });
-    for(let company of symbols.data){
-    const industry = await axios.get(`https://financialmodelingprep.com/api/v3/profile/AN`, {
+const companyCheck = async (company) =>{
+    const industry = await axios.get(`https://financialmodelingprep.com/api/v3/profile/${company}`, {
         params : {apikey:apikey}
     })
     let qualifyIndustry=false;
-    if(industries[industry.data.industry]==1){
+    if(industries[industry.data[0].industry]==1){
         qualifyIndustry=true;
     }
     const earnings = await axios.get('https://www.alphavantage.co/query?function=INCOME_STATEMENT',{
         params:{
             apikey : alphavantageKey,
-            symbol : company.symbol
+            symbol : company
         }
     })
-    let quarterlyReports = earnings.data.quarterlyReports;
     let qualify2021 = false;
     let qualify2020 = false;
     let earnings2021 = [];
     let earnings2020 = [];
     let earnings2019 = [];
+    try {
+    let quarterlyReports = earnings.data.quarterlyReports;
     for(let quarter of quarterlyReports){
         if(quarter.fiscalDateEnding.includes("2021")){
             earnings2021.push(quarter.totalRevenue)
@@ -57,12 +54,40 @@ export async function GET(request, response){
         }
     }
     if(qualify2020 || qualify2021 || qualifyIndustry){
-
-        return NextResponse.json(`${company.name} | ${company.symbol} may qualify based on ${qualify2020 && 'reports from 2020'}
-        ${qualify2021 && 'reports from 2021'} ${qualifyIndustry && 'if your business was impacted by a Government Mandate'}`)
+        let returnResponse = NextResponse.json(`${industry.data[0].companyName} | ${industry.data[0].symbol} may qualify based on${qualify2020 ?' reports from 2020':''}${(qualify2020 && qualify2021)?' &':''}${qualify2021 ? ' reports from 2021':''}${((qualify2020 || qualify2021) && qualifyIndustry)?' or':''}${qualifyIndustry ? ', if the business was impacted by a Government Mandate':''}`)
+        return {'qualifies':true, 'response':returnResponse}
+    }
+    } catch (error) {
+        let returnResponse = NextResponse.json(`${industry.data[0].companyName} | ${industry.data[0].symbol} may qualify based on${qualify2020 ?' reports from 2020':''}${(qualify2020 && qualify2021)?' &':''}${qualify2021 ? ' reports from 2021':''}${((qualify2020 || qualify2021) && qualifyIndustry)?' or':''}${qualifyIndustry ? ', if the business was impacted by a Government Mandate':''}`)
+        if(qualify2020 || qualify2021 || qualifyIndustry){
+            return {'qualifies':true, 'response':returnResponse}
+        }
+        else{
+        return {'qualifies':false}}
+    }
+    
+}
+export async function POST(request, response){
+    const { query } = await request.json();
+    const result = await companyCheck(query)
+    if(result.qualifies){
+        return result.response
     }
     else{
-        continue
+        return NextResponse.json("THIS COMPANY DOES NOT SEEM TO QUALIFY FOR ERC BASED ON THE PARAMETER WE HAVE IN STORE")
     }
+}
+export async function GET(request, response){
+    const symbols = await axios.get('https://financialmodelingprep.com/api/v3/symbol/NASDAQ', {
+        params: { apikey: apikey}
+    });
+    for(let company of symbols.data){
+        const result = await companyCheck(company)
+        if(result.qualifies){
+            return result.response
+        }
+        else{
+            continue
+        }
 }
 }
