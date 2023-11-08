@@ -9,18 +9,20 @@ export default function Home() {
   const [wikiData, setWikiData] = useState([]);
   const [companySearch, setCompanySearch] = useState('');
   const [companyData, setCompanyData] = useState([]);
-  const apiPath = 'https://company-data.vercel.app/';
-  //'http://localhost:3000/'
+  //const apiPath = 'https://company-data.vercel.app/';
+  const apiPath ='http://localhost:3000/'
 
   const handleWikiSearch = async () => {
-    const res = await axios.post(`${apiPath}/api/wiki`, {
-      query: wikiSearch
-    })
-    if(res.data=="No Hits"){
-      setWikiData(["No Hits"])
-      return 
-    }
-    setWikiData([res.data])
+    const rest = await axios.get(`${apiPath}/api/ercCheck`)
+    console.log(rest)
+    // const res = await axios.post(`${apiPath}/api/wiki`, {
+    //   query: wikiSearch
+    // })
+    // if(res.data=="No Hits"){
+    //   setWikiData(["No Hits"])
+    //   return 
+    // }
+    // setWikiData([res.data])
   }
 
   const handleCompanySearch = async () => {

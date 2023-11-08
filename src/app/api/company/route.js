@@ -2,7 +2,8 @@ import axios from "axios";
 import { NextResponse } from "next/server";
 
 export async function POST(request, response) {
-    const apikey = process.env.NEXT_PUBLIC_APIKEY ;
+    //const apikey = process.env.NEXT_PUBLIC_APIKEY ;
+    const apikey = '061a4c94b8cbd7ff33a9140fb235917a'
     const { query } = await request.json();
     const generalResult = await axios.get('https://financialmodelingprep.com/api/v3/search?limit=5&exchange=NASDAQ', {
         params: { apikey: apikey,
@@ -22,6 +23,7 @@ export async function POST(request, response) {
         const result3 = await axios.get(`https://financialmodelingprep.com/api/v3/income-statement/${companies[x].symbol}?period=annual`, {
             params :{ apikey: apikey}
         });
+        console.log(result3.data)
         companies[x]["annualEarnings"]=result3.data[0]
 
     }
